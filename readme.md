@@ -1,6 +1,8 @@
 # Stately
 
-## Using the default reducer
+## A tiny C# state management library.
+
+### Using the default reducer
 
 Example using the default reducer implementation.
 
@@ -43,7 +45,7 @@ public static class Program
 }
 ```
 
-## Using a custom reducer
+### Using a custom reducer
 
 Example using a custom reducer implementation.
 
