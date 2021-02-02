@@ -1,4 +1,5 @@
 using System;
+using System.Linq.Expressions;
 
 namespace Stately
 {
@@ -20,9 +21,9 @@ namespace Stately
       _state = _reducer.Apply(_state, action);
     }
 
-    public TResult Select<TResult>(Func<TState, TResult> projector)
+    public Expression<Func<TState, TResult>> Select<TResult>(Func<TState, TResult> projector)
     {
-      return projector(State);
+      return State => projector(State);
     }
   }
 }
