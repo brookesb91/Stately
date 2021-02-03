@@ -1,4 +1,3 @@
-using System;
 using Xunit;
 
 namespace Stately.Tests
@@ -8,35 +7,51 @@ namespace Stately.Tests
     [Fact]
     public void Expect_Value_To_Be_Initial_Value()
     {
-      var store = CreateTestStore();
+      var store = CreateTestStore(0);
 
-      Assert.Equal(store.State, 0);
+      Assert.Equal(0, store.State);
     }
 
     [Fact]
     public void Expect_Value_To_Be_Incremented()
     {
-      var store = CreateTestStore();
+      var store = CreateTestStore(0);
 
       store.Dispatch(new CounterActions.Increment());
 
-      Assert.Equal(store.State, 1);
+      Assert.Equal(1, store.State);
     }
 
     [Fact]
-    public void Expect_Value_To_Be_Decremented() { }
+    public void Expect_Value_To_Be_Decremented()
+    {
+      var store = CreateTestStore(0);
 
-    private Store<int> CreateTestStore()
+      store.Dispatch(new CounterActions.Decrement());
+
+      Assert.Equal(-1, store.State);
+    }
+
+    private Store<int> CreateTestStore(int value)
     {
       CounterReducer reducer = new CounterReducer();
-      return new Store<int>(reducer, 0);
+      return new Store<int>(reducer, value);
     }
 
     protected class CounterActions
     {
-      public class Initialise { }
-      public class Increment { }
-      public class Decrement { }
+      public class Initialise : Action
+      {
+        public static new string Type => "[counter] INITIALISE";
+      }
+      public class Increment : Action
+      {
+        public static new string Type => "[counter] INCREMENT";
+      }
+      public class Decrement : Action
+      {
+        public static new string Type => "[counter] DECREMENT";
+      }
     }
 
     protected class CounterReducer : Reducer<int>

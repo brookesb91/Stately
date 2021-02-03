@@ -16,7 +16,7 @@ namespace Stately
       _state = initialState;
     }
 
-    public void Dispatch(object action)
+    public void Dispatch<TAction>(TAction action) where TAction : Action
     {
       _state = _reducer.Apply(_state, action);
     }

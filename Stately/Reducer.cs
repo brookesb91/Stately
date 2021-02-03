@@ -1,37 +1,55 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Stately
 {
   public class Reducer<TState> : IReducer<TState>
   {
-    private readonly Dictionary<Type, List<Func<TState, object, TState>>> _reducers = new Dictionary<Type, List<Func<TState, object, TState>>>();
-    public TState Apply(TState state, object action)
+    protected Dictionary<string, List<Func<TState, Action, TState>>> _reducers = new Dictionary<string, List<Func<TState, Action, TState>>>();
+    public TState Apply<TAction>(TState state, TAction action) where TAction : Action
     {
-      if (_reducers.ContainsKey(action.GetType()))
+      var type = GetActionType(typeof(TAction));
+
+      if (_reducers.ContainsKey(type))
       {
-        return _reducers[action.GetType()]
-          .Aggregate(state, (newState, reducer) => reducer(newState, action));
+        var reducers = _reducers[type];
+        var newState = state;
+
+        foreach (var reducer in reducers)
+        {
+          newState = reducer(newState, action);
+        }
+
+        return newState;
       }
 
       return state;
     }
 
-    public void On<TAction>(System.Func<TState, TAction, TState> reducerFn) where TAction : class
+    public void On<TAction>(System.Func<TState, Action, TState> reducerFn) where TAction : Action
     {
-      if (_reducers.ContainsKey(typeof(TAction)))
+
+      var type = GetActionType(typeof(TAction));
+
+      if (_reducers.ContainsKey(type))
       {
-        _reducers[typeof(TAction)].Add(reducerFn as Func<TState, object, TState>);
+        _reducers[type].Add(reducerFn);
       }
       else
       {
-        var reducers = new List<Func<TState, object, TState>>() {
-          reducerFn as Func<TState, object, TState>
+        var reducers = new List<Func<TState, Action, TState>>() {
+          reducerFn
         };
 
-        _reducers.Add(typeof(TAction), reducers);
+        _reducers.Add(type, reducers);
       }
+    }
+
+    private string GetActionType(Type type)
+    {
+      return (string)type
+        .GetProperty("Type", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static)
+        .GetValue(null);
     }
   }
 }
