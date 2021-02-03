@@ -58,7 +58,7 @@ Example using a custom reducer implementation.
 ```cs
 public class CustomCounterReducer : IReducer<int>
 {
-  public int Apply<TAction>(TState state, TAction action) where TAction : Action
+  public int Apply<TAction>(int state, TAction action) where TAction : Action
   {
     switch (action)
     {
