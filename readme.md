@@ -12,9 +12,15 @@ using Stately;
 /// Actions that can be dispatched to the store.
 public class CounterActions
 {
-  public class Increment { }
+  public class Increment : Action
+  {
+    public static new string Type => "[counter] INCREMENT";
+  }
 
-  public class Decrement { }
+  public class Decrement : Action
+  {
+    public static new string Type => "[counter] DECREMENT";
+  }
 }
 
 /// Basic reducer implementation.
@@ -50,15 +56,9 @@ public static class Program
 Example using a custom reducer implementation.
 
 ```cs
-public class CounterActions
+public class CustomCounterReducer : IReducer<int>
 {
-  public class Increment { }
-  public class Decrement { }
-}
-
-public class CounterReducer : IReducer<int>
-{
-  public int Apply(int state, object action)
+  public int Apply<TAction>(TState state, TAction action) where TAction : Action
   {
     switch (action)
     {
@@ -78,7 +78,7 @@ public static class Program
 {
   public static void Main()
   {
-    CounterReducer reducer = new CounterReducer();
+    CustomCounterReducer reducer = new CustomCounterReducer();
     Store<int> store = new Store<int>(reducer, 0);
 
     store.Dispatch(new CounterActions.Increment());
