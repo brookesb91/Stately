@@ -1,6 +1,6 @@
 # Stately
 
-## A tiny C# state management library.
+## A C# state management library
 
 ### Using the default reducer
 
