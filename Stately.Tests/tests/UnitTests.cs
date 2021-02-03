@@ -4,6 +4,7 @@ namespace Stately.Tests
 {
   public class UnitTests
   {
+
     [Fact]
     public void Expect_Value_To_Be_Initial_Value()
     {
@@ -63,5 +64,6 @@ namespace Stately.Tests
         On<CounterActions.Decrement>((state, action) => state - 1);
       }
     }
+
   }
 }

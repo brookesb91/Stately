@@ -5,7 +5,9 @@ namespace Stately
 {
   public class Reducer<TState> : IReducer<TState>
   {
-    protected Dictionary<string, List<Func<TState, Action, TState>>> _reducers = new Dictionary<string, List<Func<TState, Action, TState>>>();
+    protected Dictionary<string, List<Func<TState, Action, TState>>> _reducers
+      = new Dictionary<string, List<Func<TState, Action, TState>>>();
+
     public TState Apply<TAction>(TState state, TAction action) where TAction : Action
     {
       var type = GetActionType(typeof(TAction));

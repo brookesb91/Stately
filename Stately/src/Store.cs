@@ -1,11 +1,9 @@
-using System;
-using System.Linq.Expressions;
-
 namespace Stately
 {
-  public class Store<TState>
+  public class Store<TState> : IStore<TState>
   {
     private IReducer<TState> _reducer;
+
     private TState _state;
 
     public TState State { get { return _state; } }
@@ -21,9 +19,9 @@ namespace Stately
       _state = _reducer.Apply(_state, action);
     }
 
-    public Expression<Func<TState, TResult>> Select<TResult>(Func<TState, TResult> projector)
+    public TResult Select<TResult>(System.Func<TState, TResult> projector)
     {
-      return State => projector(State);
+      return projector(State);
     }
   }
 }
