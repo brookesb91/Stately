@@ -22,8 +22,8 @@ public class CounterReducer : Reducer<int>
 {
   public CounterReducer()
   {
-    On<CounterActions.Increment>((state, action) => state++);
-    On<CounterActions.Decrement>((state, action) => state--);
+    On<CounterActions.Increment>((state, action) => state + 1);
+    On<CounterActions.Decrement>((state, action) => state - 1);
   }
 }
 
