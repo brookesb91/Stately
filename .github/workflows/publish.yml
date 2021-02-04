@@ -15,7 +15,7 @@ jobs:
           dotnet-version: '3.1.x'
           source-url: https://nuget.pkg.github.com/brookes/index.json
         env:
-          NUGET_AUTH_TOKEN: ${{secrets.NUGET_TOKEN}}
+          NUGET_AUTH_TOKEN: ${{secrets.NUGET_KEY}}
 
       - run: dotnet build Stately
       - run: dotnet pack --configuration Release Stately
