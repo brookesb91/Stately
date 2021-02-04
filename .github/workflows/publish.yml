@@ -13,11 +13,16 @@ jobs:
       - uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '3.1.x'
+          source-url: https://nuget.pkg.github.com/brookes/index.json
+        env:
+          NUGET_AUTH_TOKEN: ${{secrets.NUGET_TOKEN}}
 
       - run: dotnet build Stately
+      - run: dotnet pack --configuration Release Stately
+      - run: dotnet nuget push Stately/bin/Release/*.nupkg
 
-      - uses: rohith/publish-nuget@v2
-        with:
-          PROJECT_FILE_PATH: Stately/Stately.csproj
-          VERSION_FILE_PATH: .props
-          NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+      # - uses: rohith/publish-nuget@v2
+      #   with:
+      #     PROJECT_FILE_PATH: Stately/Stately.csproj
+      #     VERSION_FILE_PATH: .props
+      #     NUGET_KEY: ${{secrets.NUGET_API_KEY}}
