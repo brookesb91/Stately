@@ -5,7 +5,7 @@ on:
       - master
 jobs:
   publish:
-    name: build, pack & publish
+    name: build & pack
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -14,9 +14,13 @@ jobs:
         with:
           dotnet-version: '3.1.x'
           source-url: https://nuget.pkg.github.com/brookesb91/index.json
-        env:
-          NUGET_AUTH_TOKEN: ${{secrets.NUGET_KEY}}
+        # env:
+        #   NUGET_AUTH_TOKEN: ${{secrets.NUGET_KEY}}
 
       - run: dotnet build Stately
       - run: dotnet pack --configuration Release Stately
-      - run: dotnet nuget push Stately/bin/Release/*.nupkg
+      - name: publish
+        env:
+          NUGET_AUTH_TOKEN: ${{secrets.NUGET_KEY}}
+        run: dotnet nuget push -s https://www.nuget.org/api/v2/package -k $NUGET_AUTH_TOKEN ./Stately/bin/Release/*.nupkg
+      # - run: dotnet nuget push Stately/bin/Release/*.nupkg
